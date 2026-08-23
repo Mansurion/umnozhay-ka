@@ -25,9 +25,11 @@
     transition: all 0.2s ease;
 }
 
-.btn-option:hover {
-    background: #e2b714;
-    color: #2c2e31;
+@media (hover: hover) {
+    .btn-option:hover {
+        background: #e2b714;
+        color: #2c2e31;
+    }
 }
 
 .expression {
