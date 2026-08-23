@@ -36,16 +36,16 @@ const MathTrainer = () => {
         setOptions(shuffledOptions);
     };
 
-    const handleAnswer = (option) => {
+    const handleAnswer = (option, event) => {
+        event.currentTarget.blur();
+
         const correctAnswer = num1 * num2;
         setSelectedOption(option);
-
         if (option === correctAnswer) {
             setAnswerStatus('correct');
         } else {
             setAnswerStatus('wrong');
         }
-
         setTimeout(() => {
             generateRound();
             setAnswerStatus(null);
@@ -58,7 +58,10 @@ const MathTrainer = () => {
             <div className="expression" id="math-display">{num1} × {num2}</div>
             <div className="options-grid" id="choices-block">
                 {options.map((val, index) => (
-                    <button key={index} className={`btn-option ${val === selectedOption ? answerStatus : ''}`.trim()} onClick={() => handleAnswer(val)} disabled={answerStatus !== null}>
+                    <button key={index}
+                        className={`btn-option ${val === selectedOption ? answerStatus : ''}`.trim()}
+                        onClick={(e) => handleAnswer(val, e)}
+                        disabled={answerStatus !== null}>
                         {val}
                     </button>
                 ))}
