@@ -1,6 +1,5 @@
-import React from 'react'
-import MathTrainer from './components/MathTrainer'
-import './App.css'
+import MathTrainer from './components/MathTrainer/MathTrainer';
+import './App.css';
 
 function App() {
   return (
