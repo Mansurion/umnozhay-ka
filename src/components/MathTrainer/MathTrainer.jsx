@@ -1,73 +1,85 @@
-import { useState } from 'react';
-import './MathTrainer.css';
+import { useState, useMemo } from 'react';
+import { generateFullTableTasks, generateOptions } from '../../utils/mathHelpers';
+import { shuffleArray } from '../../utils/arrayHelpers';
+import styles from './mathTrainer.module.css';
 
-const createRoundData = () => {
-    const n1 = Math.floor(Math.random() * 8) + 2;
-    const n2 = Math.floor(Math.random() * 8) + 2;
-    const correctAnswer = n1 * n2;
+export const MathTrainer = () => {
+    // 1. Инициализируем полную перемешанную колоду из 100 задач один раз при старте
+    const [tasks] = useState(() => shuffleArray(generateFullTableTasks()));
+    // 2. Указатель на текущую задачу в массиве
+    const [currentIndex, setCurrentIndex] = useState(0);
 
-    const optionsSet = new Set();
-    optionsSet.add(correctAnswer);
+    // 3. Стейты для текущего раунда
+    const [selectedOption, setSelectedOption] = useState(null);
+    const [answerStatus, setAnswerStatus] = useState(null); // 'correct' | 'wrong' | null
+    const [isLocked, setIsLocked] = useState(false);
 
-    while (optionsSet.size < 4) {
-        const wrong = (Math.floor(Math.random() * 8) + 2) * (Math.floor(Math.random() * 8) + 2);
-        if (wrong !== correctAnswer) {
-            optionsSet.add(wrong);
-        }
+    const currentTask = tasks[currentIndex];
+
+    // 4. Оптимальное вычисление вариантов ответов без лишних зависимостей и каскадных ререндеров
+    const currentOptions = useMemo(() => {
+        if (!currentTask) return [];
+        const generated = generateOptions(currentTask.correctAnswer);
+        return shuffleArray(generated);
+    }, [currentTask]);
+
+    // Если дошли до конца массива из 100 задач
+    if (currentIndex >= tasks.length) {
+        return (
+            <div className={styles.trainerCard}>
+                <h2 className={styles.expression}>Ура! 🎉</h2>
+                <p className={styles.progressText}>Ты прошёл все 100 задач таблицы умножения!</p>
+            </div>
+        );
     }
 
-    const shuffledOptions = Array.from(optionsSet).sort(() => Math.random() - 0.5);
-
-    return { n1, n2, shuffledOptions };
-};
-
-const MathTrainer = () => {
-    const [answerStatus, setAnswerStatus] = useState(null);
-    const [selectedOption, setSelectedOption] = useState(null);
-    const [initialRound] = useState(() => createRoundData());
-    const [num1, setNum1] = useState(initialRound.n1);
-    const [num2, setNum2] = useState(initialRound.n2);
-    const [options, setOptions] = useState(initialRound.shuffledOptions);
-
-    const generateRound = () => {
-        const { n1, n2, shuffledOptions } = createRoundData();
-        setNum1(n1);
-        setNum2(n2);
-        setOptions(shuffledOptions);
-    };
-
     const handleAnswer = (option, event) => {
-        event.currentTarget.blur();
+        if (isLocked) return;
 
-        const correctAnswer = num1 * num2;
+        event.currentTarget.blur();
         setSelectedOption(option);
-        if (option === correctAnswer) {
-            setAnswerStatus('correct');
-        } else {
-            setAnswerStatus('wrong');
-        }
+        setIsLocked(true);
+
+        const isCorrect = option === currentTask.correctAnswer;
+        setAnswerStatus(isCorrect ? 'correct' : 'wrong');
+
+        // Ждем 1 секунду, показывая подсветку, затем чисто переключаем раунд
         setTimeout(() => {
-            generateRound();
             setAnswerStatus(null);
             setSelectedOption(null);
+            setCurrentIndex((prev) => prev + 1);
+            setIsLocked(false);
         }, 1000);
     };
 
     return (
-        <div className="container" id="main-card">
-            <div className="expression" id="math-display">{num1} × {num2}</div>
-            <div className="options-grid" id="choices-block">
-                {options.map((val, index) => (
-                    <button key={index}
-                        className={`btn-option ${val === selectedOption ? answerStatus : ''}`.trim()}
-                        onClick={(e) => handleAnswer(val, e)}
-                        disabled={answerStatus !== null}>
-                        {val}
-                    </button>
-                ))}
+        <div className={styles.trainerCard}>
+            <div className={styles.progressText}>
+                Задача {currentIndex + 1} из {tasks.length}
+            </div>
+
+            <div className={styles.expression}>
+                {currentTask.num1} × {currentTask.num2}
+            </div>
+
+            <div className={styles.optionsGrid}>
+                {currentOptions.map((option, index) => {
+                    const isSelected = option === selectedOption;
+                    const buttonClass = `${styles.optionButton} ${isSelected && answerStatus === 'correct' ? styles.correct : ''
+                        } ${isSelected && answerStatus === 'wrong' ? styles.wrong : ''}`;
+
+                    return (
+                        <button
+                            key={index}
+                            className={buttonClass}
+                            onClick={(e) => handleAnswer(option, e)}
+                            disabled={isLocked}
+                        >
+                            {option}
+                        </button>
+                    );
+                })}
             </div>
         </div>
     );
-}
-
-export default MathTrainer;
+};
