@@ -71,10 +71,6 @@ src/
       mainPage.jsx
       mainPage.module.css
       routes.jsx
-    trainerPage/
-      routes.jsx
-      trainerPage.jsx
-      trainerPage.module.css
   router/
     router.jsx
   styles/
@@ -141,10 +137,22 @@ import styles from './footer.module.css';
 export const Footer = () => {
     return (
         <footer className={styles.footer}>
-            <div className={styles.container}>
-                <p className={styles.text}>
-                    &copy; {CURRENT_YEAR} {PROJECT_NAME}. Все права защищены.
-                </p>
+            <div className={styles.content}>
+                <span className={styles.copyright}>
+                    © {CURRENT_YEAR} {PROJECT_NAME}
+                </span>
+                <span className={styles.separator}>|</span>
+                <span className={styles.author}>
+                    Made by{' '}
+                    <a
+                        href="https://github.com/Mansurion"
+                        className={styles.link}
+                        target="_blank"
+                        rel="noreferrer"
+                    >
+                        Mansurion
+                    </a>
+                </span>
             </div>
         </footer>
     );
@@ -153,23 +161,39 @@ export const Footer = () => {
 
 <file path="src/components/footer/footer.module.css">
 .footer {
-    width: 100%;
-    background-color: var(--bg-color);
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.container {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 24px;
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 100%;
+    padding: 20px 0;
+    margin-top: auto;
 }
 
-.text {
+.content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     font-size: 14px;
-    color: var(--text-muted);
+    color: var(--text-secondary, #666);
+}
+
+.separator {
+    color: var(--border-color, #ccc);
+    user-select: none;
+}
+
+.link {
+    color: var(--accent, #e2b714);
+    text-decoration: none;
+    font-weight: 500;
+    transition: opacity 0.2s ease;
+}
+
+@media (hover: hover) {
+    .link:hover {
+        opacity: 0.8;
+        text-decoration: underline;
+    }
 }
 </file>
 
@@ -250,237 +274,6 @@ export const Layout = () => {
 }
 </file>
 
-<file path="src/components/mathTrainer/mathTrainer.jsx">
-import { useState, useMemo } from 'react';
-import { generateFullTableTasks, generateOptions } from '../../utils/mathHelpers';
-import { shuffleArray } from '../../utils/arrayHelpers';
-import styles from './mathTrainer.module.css';
-
-export const MathTrainer = () => {
-    // 1. Инициализируем полную перемешанную колоду из 100 задач один раз при старте
-    const [tasks] = useState(() => shuffleArray(generateFullTableTasks()));
-    // 2. Указатель на текущую задачу в массиве
-    const [currentIndex, setCurrentIndex] = useState(0);
-
-    // 3. Стейты для текущего раунда
-    const [selectedOption, setSelectedOption] = useState(null);
-    const [answerStatus, setAnswerStatus] = useState(null); // 'correct' | 'wrong' | null
-    const [isLocked, setIsLocked] = useState(false);
-
-    const currentTask = tasks[currentIndex];
-
-    // 4. Оптимальное вычисление вариантов ответов без лишних зависимостей и каскадных ререндеров
-    const currentOptions = useMemo(() => {
-        if (!currentTask) return [];
-        const generated = generateOptions(currentTask.correctAnswer);
-        return shuffleArray(generated);
-    }, [currentTask]);
-
-    // Если дошли до конца массива из 100 задач
-    if (currentIndex >= tasks.length) {
-        return (
-            <div className={styles.trainerCard}>
-                <h2 className={styles.expression}>Ура! 🎉</h2>
-                <p className={styles.progressText}>Ты прошёл все 100 задач таблицы умножения!</p>
-            </div>
-        );
-    }
-
-    const handleAnswer = (option, event) => {
-        if (isLocked) return;
-
-        event.currentTarget.blur();
-        setSelectedOption(option);
-        setIsLocked(true);
-
-        const isCorrect = option === currentTask.correctAnswer;
-        setAnswerStatus(isCorrect ? 'correct' : 'wrong');
-
-        // Ждем 1 секунду, показывая подсветку, затем чисто переключаем раунд
-        setTimeout(() => {
-            setAnswerStatus(null);
-            setSelectedOption(null);
-            setCurrentIndex((prev) => prev + 1);
-            setIsLocked(false);
-        }, 1000);
-    };
-
-    return (
-        <div className={styles.trainerCard}>
-            <div className={styles.progressText}>
-                Задача {currentIndex + 1} из {tasks.length}
-            </div>
-
-            <div className={styles.expression}>
-                {currentTask.num1} × {currentTask.num2}
-            </div>
-
-            <div className={styles.optionsGrid}>
-                {currentOptions.map((option, index) => {
-                    const isSelected = option === selectedOption;
-                    const buttonClass = `${styles.optionButton} ${isSelected && answerStatus === 'correct' ? styles.correct : ''
-                        } ${isSelected && answerStatus === 'wrong' ? styles.wrong : ''}`;
-
-                    return (
-                        <button
-                            key={index}
-                            className={buttonClass}
-                            onClick={(e) => handleAnswer(option, e)}
-                            disabled={isLocked}
-                        >
-                            {option}
-                        </button>
-                    );
-                })}
-            </div>
-        </div>
-    );
-};
-</file>
-
-<file path="src/components/mathTrainer/mathTrainer.module.css">
-.trainerCard {
-    background-color: var(--card-bg);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 16px;
-    padding: 40px;
-    width: 100%;
-    max-width: 500px;
-    text-align: center;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-}
-
-.progressText {
-    font-size: 14px;
-    color: var(--text-muted);
-    margin-bottom: 24px;
-    font-variant-numeric: tabular-nums;
-}
-
-.expression {
-    font-size: 64px;
-    font-weight: 700;
-    color: var(--text-main);
-    margin-bottom: 40px;
-    letter-spacing: 2px;
-}
-
-.optionsGrid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-}
-
-.optionButton {
-    background-color: rgba(255, 255, 255, 0.02);
-    border: 2px solid rgba(255, 255, 255, 0.05);
-    color: var(--text-main);
-    padding: 18px;
-    font-size: 20px;
-    font-weight: 600;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.optionButton:hover:not(:disabled) {
-    border-color: var(--accent);
-    color: var(--accent);
-    background-color: rgba(226, 183, 20, 0.05);
-}
-
-/* Стили для подсветки результатов */
-.correct {
-    background-color: #2e7d32 !important;
-    border-color: #4caf50 !important;
-    color: #ffffff !important;
-}
-
-.wrong {
-    background-color: #c62828 !important;
-    border-color: #f44336 !important;
-    color: #ffffff !important;
-}
-</file>
-
-<file path="src/constants/constants.js">
-export const PROJECT_NAME = 'Умножай-ка';
-export const CURRENT_YEAR = String(new Date().getFullYear());
-
-export const ROUTES = {
-    HOME: '/',
-    TRAINER: '/trainer',
-};
-
-export const BASE_NAME = '/umnozhay-ka';
-</file>
-
-<file path="src/pages/mainPage/mainPage.jsx">
-import { Link } from 'react-router-dom';
-import { ROUTES } from '../../constants/constants';
-import styles from './mainPage.module.css';
-
-export const MainPage = () => {
-    return (
-        <div className={styles.container}>
-            <h1 className={styles.title}>Прокачай умножение</h1>
-            <p className={styles.subtitle}>
-                Минималистичный тренажер таблицы умножения от 1 до 10. Проверь свою скорость и точность счета!
-            </p>
-            <Link to={ROUTES.TRAINER} className={styles.startButton}>
-                Начать тренировку
-            </Link>
-        </div>
-    );
-};
-</file>
-
-<file path="src/pages/mainPage/mainPage.module.css">
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 60px 20px;
-}
-
-.title {
-    font-size: 48px;
-    font-weight: 800;
-    color: var(--text-main);
-    margin-bottom: 16px;
-}
-
-.subtitle {
-    font-size: 18px;
-    color: var(--text-muted);
-    max-width: 500px;
-    margin-bottom: 40px;
-    line-height: 1.6;
-}
-
-.startButton {
-    display: inline-block;
-    background-color: transparent;
-    color: var(--accent);
-    border: 2px solid var(--accent);
-    padding: 14px 32px;
-    font-size: 18px;
-    font-weight: 600;
-    border-radius: 8px;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.2s ease;
-}
-
-.startButton:hover {
-    background-color: var(--accent);
-    color: var(--bg-color);
-    transform: translateY(-2px);
-}
-</file>
-
 <file path="src/pages/mainPage/routes.jsx">
 import { MainPage } from './mainPage';
 
@@ -490,73 +283,6 @@ export const mainPageRoutes = [
         element: <MainPage />,
     },
 ];
-</file>
-
-<file path="src/pages/trainerPage/routes.jsx">
-import { TrainerPage } from './trainerPage';
-import { ROUTES } from '../../constants/constants';
-
-export const trainerPageRoutes = [
-    {
-        path: ROUTES.TRAINER,
-        element: <TrainerPage />,
-    },
-];
-</file>
-
-<file path="src/pages/trainerPage/trainerPage.jsx">
-import { MathTrainer } from '../../components/mathTrainer/mathTrainer';
-import styles from './trainerPage.module.css';
-
-export const TrainerPage = () => {
-    return (
-        <div className={styles.wrapper}>
-            <MathTrainer />
-        </div>
-    );
-};
-</file>
-
-<file path="src/pages/trainerPage/trainerPage.module.css">
-.wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 400px;
-    width: 100%;
-}
-</file>
-
-<file path="src/router/router.jsx">
-import { createBrowserRouter } from 'react-router-dom';
-import { Layout } from '../components/layout/layout';
-import { ROUTES, BASE_NAME } from '../constants/constants';
-import { mainPageRoutes } from '../pages/mainPage/routes';
-import { trainerPageRoutes } from '../pages/trainerPage/routes';
-
-export const router = createBrowserRouter(
-    [
-        {
-            path: ROUTES.HOME,
-            element: <Layout />,
-            children: [
-                ...mainPageRoutes,
-                ...trainerPageRoutes,
-            ],
-        },
-    ],
-    {
-        basename: BASE_NAME,
-        future: {
-            v7_relativeSplatPath: true,
-            v7_fetcherPersist: true,
-            v7_normalizeFormMethod: true,
-            v7_partialHydration: true,
-            v7_skipActionError: true,
-        },
-    }
-);
 </file>
 
 <file path="src/styles/global.css">
@@ -599,9 +325,6 @@ export const shuffleArray = (array) => {
 </file>
 
 <file path="src/utils/mathHelpers.js">
-/**
- * Генерирует упорядоченный массив из 100 задач таблицы умножения (от 1 до 10)
- */
 export const generateFullTableTasks = () => {
     const tasks = [];
     for (let i = 1; i <= 10; i++) {
@@ -617,22 +340,16 @@ export const generateFullTableTasks = () => {
     return tasks;
 };
 
-/**
- * Генерирует 3 уникальных ложных ответа на основе случайного шага вокруг правильного
- */
 export const generateOptions = (correctAnswer) => {
     const optionsSet = new Set();
     optionsSet.add(correctAnswer);
 
     while (optionsSet.size < 4) {
-        // Случайный шаг от 1 до 10
         const step = Math.floor(Math.random() * 10) + 1;
-        // Случайно выбираем знак: плюс или минус
         const isPositive = Math.random() > 0.5;
 
         const fakeAnswer = isPositive ? correctAnswer + step : correctAnswer - step;
 
-        // Исключаем ответы меньше или равные нулю
         if (fakeAnswer > 0) {
             optionsSet.add(fakeAnswer);
         }
@@ -720,6 +437,219 @@ export default defineConfig({
 })
 </file>
 
+<file path="src/components/mathTrainer/mathTrainer.jsx">
+import { clsx } from 'clsx';
+import { useState, useMemo } from 'react';
+import { generateFullTableTasks, generateOptions } from '../../utils/mathHelpers';
+import { shuffleArray } from '../../utils/arrayHelpers';
+import styles from './mathTrainer.module.css';
+
+export const MathTrainer = () => {
+    const [tasks, setTasks] = useState(() => shuffleArray(generateFullTableTasks()));
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [correctCount, setCorrectCount] = useState(0);
+    const [selectedOption, setSelectedOption] = useState(null);
+    const [answerStatus, setAnswerStatus] = useState(null);
+    const [isLocked, setIsLocked] = useState(false);
+
+    const currentTask = tasks[currentIndex];
+
+    const currentOptions = useMemo(() => {
+        if (!currentTask) return [];
+        const generated = generateOptions(currentTask.correctAnswer);
+        return shuffleArray(generated);
+    }, [currentTask]);
+
+    if (currentIndex >= tasks.length) {
+        return (
+            <div className={styles.trainerCard}>
+                <h2 className={styles.expression}>Ура! 🎉</h2>
+                <p className={styles.progressText}>Ты прошёл все 100 задач таблицы умножения!</p>
+            </div>
+        );
+    }
+
+    const handleAnswer = (option, event) => {
+        if (isLocked) return;
+
+        event.currentTarget.blur();
+        setSelectedOption(option);
+        setIsLocked(true);
+
+        const isCorrect = option === currentTask.correctAnswer;
+        setAnswerStatus(isCorrect ? 'correct' : 'wrong');
+
+        setTimeout(() => {
+            setAnswerStatus(null);
+            setSelectedOption(null);
+            setCurrentIndex((prev) => prev + 1);
+            setIsLocked(false);
+        }, 1000);
+    };
+
+    return (
+        <div className={styles.trainerCard}>
+            <div className={styles.progressText}>
+                Задача {currentIndex + 1} из {tasks.length}
+            </div>
+
+            <div className={styles.expression}>
+                {currentTask.num1} × {currentTask.num2}
+            </div>
+
+            <div className={styles.optionsGrid}>
+                {currentOptions.map((option, index) => {
+                    const isSelected = option === selectedOption;
+                    const isCorrectAnswer = isSelected && answerStatus === 'correct';
+                    const isWrongAnswer = isSelected && answerStatus === 'wrong';
+
+                    const buttonClass = clsx(
+                        styles.optionButton,
+                        isCorrectAnswer && styles.correct,
+                        isWrongAnswer && styles.wrong
+                    );
+
+                    return (
+                        <button
+                            key={index}
+                            className={buttonClass}
+                            onClick={(e) => handleAnswer(option, e)}
+                            disabled={isLocked}
+                        >
+                            {option}
+                        </button>
+                    );
+                })}
+            </div>
+        </div>
+    );
+};
+</file>
+
+<file path="src/components/mathTrainer/mathTrainer.module.css">
+.trainerCard {
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+}
+
+.progressText {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+    font-variant-numeric: tabular-nums;
+}
+
+.expression {
+    font-size: 64px;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 40px;
+    letter-spacing: 2px;
+}
+
+.optionsGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.optionButton {
+    background-color: rgba(255, 255, 255, 0.02);
+    border: 2px solid rgba(255, 255, 255, 0.05);
+    color: var(--text-main);
+    padding: 18px;
+    font-size: 20px;
+    font-weight: 600;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+@media (hover: hover) {
+    .optionButton:hover:not(:disabled) {
+        border-color: var(--accent);
+        color: var(--accent);
+        background-color: rgba(226, 183, 20, 0.05);
+    }
+}
+
+.correct {
+    background-color: #2e7d32 !important;
+    border-color: #4caf50 !important;
+    color: #ffffff !important;
+}
+
+.wrong {
+    background-color: #c62828 !important;
+    border-color: #f44336 !important;
+    color: #ffffff !important;
+}
+</file>
+
+<file path="src/constants/constants.js">
+export const PROJECT_NAME = 'Умножай-ка';
+export const CURRENT_YEAR = String(new Date().getFullYear());
+export const ROUTES = {
+    HOME: '/',
+};
+
+export const BASE_NAME = '/umnozhay-ka';
+</file>
+
+<file path="src/pages/mainPage/mainPage.jsx">
+import { MathTrainer } from '../../components/mathTrainer/mathTrainer';
+import styles from './mainPage.module.css';
+
+export const MainPage = () => {
+    return (
+        <div className={styles.container}>
+            <MathTrainer />
+        </div>
+    );
+};
+</file>
+
+<file path="src/pages/mainPage/mainPage.module.css">
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 400px;
+}
+</file>
+
+<file path="src/router/router.jsx">
+import { createBrowserRouter } from 'react-router-dom';
+import { Layout } from '../components/layout/layout';
+import { ROUTES, BASE_NAME } from '../constants/constants';
+import { mainPageRoutes } from '../pages/mainPage/routes';
+
+export const router = createBrowserRouter(
+    [
+        {
+            path: ROUTES.HOME,
+            element: <Layout />,
+            children: [
+                ...mainPageRoutes,
+            ],
+        },
+    ],
+    {
+        basename: BASE_NAME,
+        future: {
+            v7_relativeSplatPath: true,
+            v7_fetcherPersist: true,
+            v7_normalizeFormMethod: true,
+            v7_partialHydration: true,
+            v7_skipActionError: true,
+        },
+    }
+);
+</file>
+
 <file path="src/main.jsx">
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
@@ -773,6 +703,7 @@ If you are developing a production application, we recommend using TypeScript wi
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
+    "clsx": "^2.1.1",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-router-dom": "^7.18.2"
@@ -782,7 +713,7 @@ If you are developing a production application, we recommend using TypeScript wi
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^4.3.4",
-    "eslint": "^10.0.0",
+    "eslint": "^10.4.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.3",
     "gh-pages": "^6.3.0",

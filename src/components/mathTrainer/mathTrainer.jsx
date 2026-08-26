@@ -1,3 +1,4 @@
+import { ANSWER_STATUS } from '../../constants/constants';
 import { clsx } from 'clsx';
 import { useState, useMemo } from 'react';
 import { generateFullTableTasks, generateOptions } from '../../utils/mathHelpers';
@@ -5,11 +6,11 @@ import { shuffleArray } from '../../utils/arrayHelpers';
 import styles from './mathTrainer.module.css';
 
 export const MathTrainer = () => {
-    const [tasks] = useState(() => shuffleArray(generateFullTableTasks()));
+    const [tasks, setTasks] = useState(() => shuffleArray(generateFullTableTasks()));
     const [currentIndex, setCurrentIndex] = useState(0);
-
+    const [correctCount, setCorrectCount] = useState(0);
     const [selectedOption, setSelectedOption] = useState(null);
-    const [answerStatus, setAnswerStatus] = useState(null); // 'correct' | 'wrong' | null
+    const [answerStatus, setAnswerStatus] = useState(null);
     const [isLocked, setIsLocked] = useState(false);
 
     const currentTask = tasks[currentIndex];
@@ -31,15 +32,24 @@ export const MathTrainer = () => {
 
     const handleAnswer = (option, event) => {
         if (isLocked) return;
-
         event.currentTarget.blur();
         setSelectedOption(option);
         setIsLocked(true);
 
         const isCorrect = option === currentTask.correctAnswer;
-        setAnswerStatus(isCorrect ? 'correct' : 'wrong');
+        setAnswerStatus(isCorrect ? ANSWER_STATUS.CORRECT : ANSWER_STATUS.WRONG);
 
         setTimeout(() => {
+            if (isCorrect) {
+                setCorrectCount((prev) => prev + 1);
+            } else {
+                const repeatedTask = {
+                    ...currentTask,
+                    id: `${currentTask.id}-repeat-${Date.now()}`,
+                };
+                setTasks((prevTasks) => [...prevTasks, repeatedTask]);
+            }
+
             setAnswerStatus(null);
             setSelectedOption(null);
             setCurrentIndex((prev) => prev + 1);
@@ -50,7 +60,7 @@ export const MathTrainer = () => {
     return (
         <div className={styles.trainerCard}>
             <div className={styles.progressText}>
-                Задача {currentIndex + 1} из {tasks.length}
+                Правильно решено: {correctCount} из 100
             </div>
 
             <div className={styles.expression}>
@@ -58,22 +68,22 @@ export const MathTrainer = () => {
             </div>
 
             <div className={styles.optionsGrid}>
-                {currentOptions.map((option, index) => {
+                {currentOptions.map(function (option, index) {
                     const isSelected = option === selectedOption;
-                    const isCorrectAnswer = isSelected && answerStatus === 'correct';
-                    const isWrongAnswer = isSelected && answerStatus === 'wrong';
 
-                    const buttonClass = clsx(
-                        styles.optionButton,
-                        isCorrectAnswer && styles.correct,
-                        isWrongAnswer && styles.wrong
-                    );
+                    const getButtonClass = function () {
+                        if (isSelected && answerStatus === ANSWER_STATUS.CORRECT) return styles.correct;
+                        if (isSelected && answerStatus === ANSWER_STATUS.WRONG) return styles.wrong;
+                        return '';
+                    };
 
                     return (
                         <button
                             key={index}
-                            className={buttonClass}
-                            onClick={(e) => handleAnswer(option, e)}
+                            className={clsx(styles.optionButton, getButtonClass())}
+                            onClick={function (e) {
+                                handleAnswer(option, e);
+                            }}
                             disabled={isLocked}
                         >
                             {option}
@@ -81,6 +91,7 @@ export const MathTrainer = () => {
                     );
                 })}
             </div>
+
         </div>
     );
 };
