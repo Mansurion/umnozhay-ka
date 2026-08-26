@@ -1,12 +1,7 @@
 .trainerCard {
-    background-color: var(--card-bg);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 16px;
-    padding: 40px;
     width: 100%;
     max-width: 500px;
     text-align: center;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
 
 .progressText {
@@ -42,13 +37,14 @@
     transition: all 0.2s ease;
 }
 
-.optionButton:hover:not(:disabled) {
-    border-color: var(--accent);
-    color: var(--accent);
-    background-color: rgba(226, 183, 20, 0.05);
+@media (hover: hover) {
+    .optionButton:hover:not(:disabled) {
+        border-color: var(--accent);
+        color: var(--accent);
+        background-color: rgba(226, 183, 20, 0.05);
+    }
 }
 
-/* Стили для подсветки результатов */
 .correct {
     background-color: #2e7d32 !important;
     border-color: #4caf50 !important;

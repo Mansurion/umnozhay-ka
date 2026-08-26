@@ -40,6 +40,9 @@ The content is organized as follows:
 </file_summary>
 
 <directory_structure>
+.github/
+  workflows/
+    deploy.yml
 public/
   favicon.svg
   icons.svg
@@ -49,12 +52,37 @@ src/
     react.svg
     vite.svg
   components/
-    MathTrainer/
-      MathTrainer.css
-      MathTrainer.jsx
-  App.css
+    footer/
+      footer.jsx
+      footer.module.css
+    header/
+      header.jsx
+      header.module.css
+    layout/
+      layout.jsx
+      layout.module.css
+    mathTrainer/
+      mathTrainer.jsx
+      mathTrainer.module.css
+  constants/
+    constants.js
+  pages/
+    mainPage/
+      mainPage.jsx
+      mainPage.module.css
+      routes.jsx
+    trainerPage/
+      routes.jsx
+      trainerPage.jsx
+      trainerPage.module.css
+  router/
+    router.jsx
+  styles/
+    global.css
+  utils/
+    arrayHelpers.js
+    mathHelpers.js
   App.jsx
-  index.css
   main.jsx
 .gitignore
 eslint.config.js
@@ -106,17 +134,512 @@ This section contains the contents of the repository's files.
 <svg xmlns="http://www.w3.org/2000/svg" width="77" height="47" fill="none" aria-labelledby="vite-logo-title" viewBox="0 0 77 47"><title id="vite-logo-title">Vite</title><style>.parenthesis{fill:#000}@media (prefers-color-scheme:dark){.parenthesis{fill:#fff}}</style><path fill="#9135ff" d="M40.151 45.71c-.663.844-2.02.374-2.02-.699V34.708a2.26 2.26 0 0 0-2.262-2.262H24.493c-.92 0-1.457-1.04-.92-1.788l7.479-10.471c1.07-1.498 0-3.578-1.842-3.578H15.443c-.92 0-1.456-1.04-.92-1.788l9.696-13.576c.213-.297.556-.474.92-.474h28.894c.92 0 1.456 1.04.92 1.788l-7.48 10.472c-1.07 1.497 0 3.578 1.842 3.578h11.376c.944 0 1.474 1.087.89 1.83L40.153 45.712z"/><mask id="a" width="48" height="47" x="14" y="0" maskUnits="userSpaceOnUse" style="mask-type:alpha"><path fill="#000" d="M40.047 45.71c-.663.843-2.02.374-2.02-.699V34.708a2.26 2.26 0 0 0-2.262-2.262H24.389c-.92 0-1.457-1.04-.92-1.788l7.479-10.472c1.07-1.497 0-3.578-1.842-3.578H15.34c-.92 0-1.456-1.04-.92-1.788l9.696-13.575c.213-.297.556-.474.92-.474H53.93c.92 0 1.456 1.04.92 1.788L47.37 13.03c-1.07 1.498 0 3.578 1.842 3.578h11.376c.944 0 1.474 1.088.89 1.831L40.049 45.712z"/></mask><g mask="url(#a)"><g filter="url(#b)"><ellipse cx="5.508" cy="14.704" fill="#eee6ff" rx="5.508" ry="14.704" transform="rotate(269.814 20.96 11.29)scale(-1 1)"/></g><g filter="url(#c)"><ellipse cx="10.399" cy="29.851" fill="#eee6ff" rx="10.399" ry="29.851" transform="rotate(89.814 -16.902 -8.275)scale(1 -1)"/></g><g filter="url(#d)"><ellipse cx="5.508" cy="30.487" fill="#8900ff" rx="5.508" ry="30.487" transform="rotate(89.814 -19.197 -7.127)scale(1 -1)"/></g><g filter="url(#e)"><ellipse cx="5.508" cy="30.599" fill="#8900ff" rx="5.508" ry="30.599" transform="rotate(89.814 -25.928 4.177)scale(1 -1)"/></g><g filter="url(#f)"><ellipse cx="5.508" cy="30.599" fill="#8900ff" rx="5.508" ry="30.599" transform="rotate(89.814 -25.738 5.52)scale(1 -1)"/></g><g filter="url(#g)"><ellipse cx="14.072" cy="22.078" fill="#eee6ff" rx="14.072" ry="22.078" transform="rotate(93.35 31.245 55.578)scale(-1 1)"/></g><g filter="url(#h)"><ellipse cx="3.47" cy="21.501" fill="#8900ff" rx="3.47" ry="21.501" transform="rotate(89.009 35.419 55.202)scale(-1 1)"/></g><g filter="url(#i)"><ellipse cx="3.47" cy="21.501" fill="#8900ff" rx="3.47" ry="21.501" transform="rotate(89.009 35.419 55.202)scale(-1 1)"/></g><g filter="url(#j)"><ellipse cx="14.592" cy="9.743" fill="#8900ff" rx="4.407" ry="29.108" transform="rotate(39.51 14.592 9.743)"/></g><g filter="url(#k)"><ellipse cx="61.728" cy="-5.321" fill="#8900ff" rx="4.407" ry="29.108" transform="rotate(37.892 61.728 -5.32)"/></g><g filter="url(#l)"><ellipse cx="55.618" cy="7.104" fill="#00c2ff" rx="5.971" ry="9.665" transform="rotate(37.892 55.618 7.104)"/></g><g filter="url(#m)"><ellipse cx="12.326" cy="39.103" fill="#8900ff" rx="4.407" ry="29.108" transform="rotate(37.892 12.326 39.103)"/></g><g filter="url(#n)"><ellipse cx="12.326" cy="39.103" fill="#8900ff" rx="4.407" ry="29.108" transform="rotate(37.892 12.326 39.103)"/></g><g filter="url(#o)"><ellipse cx="49.857" cy="30.678" fill="#8900ff" rx="4.407" ry="29.108" transform="rotate(37.892 49.857 30.678)"/></g><g filter="url(#p)"><ellipse cx="52.623" cy="33.171" fill="#00c2ff" rx="5.971" ry="15.297" transform="rotate(37.892 52.623 33.17)"/></g></g><path d="M6.919 0c-9.198 13.166-9.252 33.575 0 46.789h6.215c-9.25-13.214-9.196-33.623 0-46.789zm62.424 0h-6.215c9.198 13.166 9.252 33.575 0 46.789h6.215c9.25-13.214 9.196-33.623 0-46.789" class="parenthesis"/><defs><filter id="b" width="60.045" height="41.654" x="-5.564" y="16.92" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="7.659"/></filter><filter id="c" width="90.34" height="51.437" x="-40.407" y="-6.762" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="7.659"/></filter><filter id="d" width="79.355" height="29.4" x="-35.435" y="2.801" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="e" width="79.579" height="29.4" x="-30.84" y="20.8" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="f" width="79.579" height="29.4" x="-29.307" y="21.949" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="g" width="74.749" height="58.852" x="29.961" y="-17.13" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="7.659"/></filter><filter id="h" width="61.377" height="25.362" x="37.754" y="3.055" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="i" width="61.377" height="25.362" x="37.754" y="3.055" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="j" width="56.045" height="63.649" x="-13.43" y="-22.082" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="k" width="54.814" height="64.646" x="34.321" y="-37.644" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="l" width="33.541" height="35.313" x="38.847" y="-10.552" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="m" width="54.814" height="64.646" x="-15.081" y="6.78" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="n" width="54.814" height="64.646" x="-15.081" y="6.78" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="o" width="54.814" height="64.646" x="22.45" y="-1.645" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="p" width="39.409" height="43.623" x="32.919" y="11.36" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter></defs></svg>
 </file>
 
-<file path="src/main.jsx">
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.jsx'
+<file path="src/components/footer/footer.jsx">
+import { CURRENT_YEAR, PROJECT_NAME } from '../../constants/constants';
+import styles from './footer.module.css';
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-)
+export const Footer = () => {
+    return (
+        <footer className={styles.footer}>
+            <div className={styles.container}>
+                <p className={styles.text}>
+                    &copy; {CURRENT_YEAR} {PROJECT_NAME}. Все права защищены.
+                </p>
+            </div>
+        </footer>
+    );
+};
+</file>
+
+<file path="src/components/footer/footer.module.css">
+.footer {
+    width: 100%;
+    background-color: var(--bg-color);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.text {
+    font-size: 14px;
+    color: var(--text-muted);
+}
+</file>
+
+<file path="src/components/header/header.jsx">
+import { PROJECT_NAME } from '../../constants/constants';
+import styles from './header.module.css';
+
+export const Header = () => {
+    return (
+        <header className={styles.header}>
+            <div className={styles.container}>
+                <div className={styles.logo}>{PROJECT_NAME}</div>
+            </div>
+        </header>
+    );
+};
+</file>
+
+<file path="src/components/header/header.module.css">
+.header {
+    width: 100%;
+    height: 70px;
+    background-color: var(--card-bg);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.container {
+    max-width: 1000px;
+    height: 100%;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--accent);
+    text-decoration: none;
+    letter-spacing: 0.5px;
+}
+</file>
+
+<file path="src/components/layout/layout.jsx">
+import { Outlet } from 'react-router-dom';
+import { Header } from '../header/header';
+import { Footer } from '../footer/footer';
+import styles from './layout.module.css';
+
+export const Layout = () => {
+    return (
+        <div className={styles.wrapper}>
+            <Header />
+            <main className={styles.main}>
+                <Outlet />
+            </main>
+            <Footer />
+        </div>
+    );
+};
+</file>
+
+<file path="src/components/layout/layout.module.css">
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.main {
+    flex: 1;
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px 24px;
+}
+</file>
+
+<file path="src/components/mathTrainer/mathTrainer.jsx">
+import { useState, useMemo } from 'react';
+import { generateFullTableTasks, generateOptions } from '../../utils/mathHelpers';
+import { shuffleArray } from '../../utils/arrayHelpers';
+import styles from './mathTrainer.module.css';
+
+export const MathTrainer = () => {
+    // 1. Инициализируем полную перемешанную колоду из 100 задач один раз при старте
+    const [tasks] = useState(() => shuffleArray(generateFullTableTasks()));
+    // 2. Указатель на текущую задачу в массиве
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+    // 3. Стейты для текущего раунда
+    const [selectedOption, setSelectedOption] = useState(null);
+    const [answerStatus, setAnswerStatus] = useState(null); // 'correct' | 'wrong' | null
+    const [isLocked, setIsLocked] = useState(false);
+
+    const currentTask = tasks[currentIndex];
+
+    // 4. Оптимальное вычисление вариантов ответов без лишних зависимостей и каскадных ререндеров
+    const currentOptions = useMemo(() => {
+        if (!currentTask) return [];
+        const generated = generateOptions(currentTask.correctAnswer);
+        return shuffleArray(generated);
+    }, [currentTask]);
+
+    // Если дошли до конца массива из 100 задач
+    if (currentIndex >= tasks.length) {
+        return (
+            <div className={styles.trainerCard}>
+                <h2 className={styles.expression}>Ура! 🎉</h2>
+                <p className={styles.progressText}>Ты прошёл все 100 задач таблицы умножения!</p>
+            </div>
+        );
+    }
+
+    const handleAnswer = (option, event) => {
+        if (isLocked) return;
+
+        event.currentTarget.blur();
+        setSelectedOption(option);
+        setIsLocked(true);
+
+        const isCorrect = option === currentTask.correctAnswer;
+        setAnswerStatus(isCorrect ? 'correct' : 'wrong');
+
+        // Ждем 1 секунду, показывая подсветку, затем чисто переключаем раунд
+        setTimeout(() => {
+            setAnswerStatus(null);
+            setSelectedOption(null);
+            setCurrentIndex((prev) => prev + 1);
+            setIsLocked(false);
+        }, 1000);
+    };
+
+    return (
+        <div className={styles.trainerCard}>
+            <div className={styles.progressText}>
+                Задача {currentIndex + 1} из {tasks.length}
+            </div>
+
+            <div className={styles.expression}>
+                {currentTask.num1} × {currentTask.num2}
+            </div>
+
+            <div className={styles.optionsGrid}>
+                {currentOptions.map((option, index) => {
+                    const isSelected = option === selectedOption;
+                    const buttonClass = `${styles.optionButton} ${isSelected && answerStatus === 'correct' ? styles.correct : ''
+                        } ${isSelected && answerStatus === 'wrong' ? styles.wrong : ''}`;
+
+                    return (
+                        <button
+                            key={index}
+                            className={buttonClass}
+                            onClick={(e) => handleAnswer(option, e)}
+                            disabled={isLocked}
+                        >
+                            {option}
+                        </button>
+                    );
+                })}
+            </div>
+        </div>
+    );
+};
+</file>
+
+<file path="src/components/mathTrainer/mathTrainer.module.css">
+.trainerCard {
+    background-color: var(--card-bg);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 40px;
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.progressText {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+    font-variant-numeric: tabular-nums;
+}
+
+.expression {
+    font-size: 64px;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 40px;
+    letter-spacing: 2px;
+}
+
+.optionsGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.optionButton {
+    background-color: rgba(255, 255, 255, 0.02);
+    border: 2px solid rgba(255, 255, 255, 0.05);
+    color: var(--text-main);
+    padding: 18px;
+    font-size: 20px;
+    font-weight: 600;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.optionButton:hover:not(:disabled) {
+    border-color: var(--accent);
+    color: var(--accent);
+    background-color: rgba(226, 183, 20, 0.05);
+}
+
+/* Стили для подсветки результатов */
+.correct {
+    background-color: #2e7d32 !important;
+    border-color: #4caf50 !important;
+    color: #ffffff !important;
+}
+
+.wrong {
+    background-color: #c62828 !important;
+    border-color: #f44336 !important;
+    color: #ffffff !important;
+}
+</file>
+
+<file path="src/constants/constants.js">
+export const PROJECT_NAME = 'Умножай-ка';
+export const CURRENT_YEAR = String(new Date().getFullYear());
+
+export const ROUTES = {
+    HOME: '/',
+    TRAINER: '/trainer',
+};
+
+export const BASE_NAME = '/umnozhay-ka';
+</file>
+
+<file path="src/pages/mainPage/mainPage.jsx">
+import { Link } from 'react-router-dom';
+import { ROUTES } from '../../constants/constants';
+import styles from './mainPage.module.css';
+
+export const MainPage = () => {
+    return (
+        <div className={styles.container}>
+            <h1 className={styles.title}>Прокачай умножение</h1>
+            <p className={styles.subtitle}>
+                Минималистичный тренажер таблицы умножения от 1 до 10. Проверь свою скорость и точность счета!
+            </p>
+            <Link to={ROUTES.TRAINER} className={styles.startButton}>
+                Начать тренировку
+            </Link>
+        </div>
+    );
+};
+</file>
+
+<file path="src/pages/mainPage/mainPage.module.css">
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.title {
+    font-size: 48px;
+    font-weight: 800;
+    color: var(--text-main);
+    margin-bottom: 16px;
+}
+
+.subtitle {
+    font-size: 18px;
+    color: var(--text-muted);
+    max-width: 500px;
+    margin-bottom: 40px;
+    line-height: 1.6;
+}
+
+.startButton {
+    display: inline-block;
+    background-color: transparent;
+    color: var(--accent);
+    border: 2px solid var(--accent);
+    padding: 14px 32px;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.startButton:hover {
+    background-color: var(--accent);
+    color: var(--bg-color);
+    transform: translateY(-2px);
+}
+</file>
+
+<file path="src/pages/mainPage/routes.jsx">
+import { MainPage } from './mainPage';
+
+export const mainPageRoutes = [
+    {
+        index: true,
+        element: <MainPage />,
+    },
+];
+</file>
+
+<file path="src/pages/trainerPage/routes.jsx">
+import { TrainerPage } from './trainerPage';
+import { ROUTES } from '../../constants/constants';
+
+export const trainerPageRoutes = [
+    {
+        path: ROUTES.TRAINER,
+        element: <TrainerPage />,
+    },
+];
+</file>
+
+<file path="src/pages/trainerPage/trainerPage.jsx">
+import { MathTrainer } from '../../components/mathTrainer/mathTrainer';
+import styles from './trainerPage.module.css';
+
+export const TrainerPage = () => {
+    return (
+        <div className={styles.wrapper}>
+            <MathTrainer />
+        </div>
+    );
+};
+</file>
+
+<file path="src/pages/trainerPage/trainerPage.module.css">
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    width: 100%;
+}
+</file>
+
+<file path="src/router/router.jsx">
+import { createBrowserRouter } from 'react-router-dom';
+import { Layout } from '../components/layout/layout';
+import { ROUTES, BASE_NAME } from '../constants/constants';
+import { mainPageRoutes } from '../pages/mainPage/routes';
+import { trainerPageRoutes } from '../pages/trainerPage/routes';
+
+export const router = createBrowserRouter(
+    [
+        {
+            path: ROUTES.HOME,
+            element: <Layout />,
+            children: [
+                ...mainPageRoutes,
+                ...trainerPageRoutes,
+            ],
+        },
+    ],
+    {
+        basename: BASE_NAME,
+        future: {
+            v7_relativeSplatPath: true,
+            v7_fetcherPersist: true,
+            v7_normalizeFormMethod: true,
+            v7_partialHydration: true,
+            v7_skipActionError: true,
+        },
+    }
+);
+</file>
+
+<file path="src/styles/global.css">
+:root {
+    --bg-color: #323437;
+    --card-bg: #2c2e31;
+    --text-main: #d1d0c5;
+    --text-muted: #646669;
+    --accent: #e2b714;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+}
+</file>
+
+<file path="src/utils/arrayHelpers.js">
+export const shuffleArray = (array) => {
+    const shuffled = [...array];
+    
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+};
+</file>
+
+<file path="src/utils/mathHelpers.js">
+/**
+ * Генерирует упорядоченный массив из 100 задач таблицы умножения (от 1 до 10)
+ */
+export const generateFullTableTasks = () => {
+    const tasks = [];
+    for (let i = 1; i <= 10; i++) {
+        for (let j = 1; j <= 10; j++) {
+            tasks.push({
+                id: `${i}-${j}`,
+                num1: i,
+                num2: j,
+                correctAnswer: i * j,
+            });
+        }
+    }
+    return tasks;
+};
+
+/**
+ * Генерирует 3 уникальных ложных ответа на основе случайного шага вокруг правильного
+ */
+export const generateOptions = (correctAnswer) => {
+    const optionsSet = new Set();
+    optionsSet.add(correctAnswer);
+
+    while (optionsSet.size < 4) {
+        // Случайный шаг от 1 до 10
+        const step = Math.floor(Math.random() * 10) + 1;
+        // Случайно выбираем знак: плюс или минус
+        const isPositive = Math.random() > 0.5;
+
+        const fakeAnswer = isPositive ? correctAnswer + step : correctAnswer - step;
+
+        // Исключаем ответы меньше или равные нулю
+        if (fakeAnswer > 0) {
+            optionsSet.add(fakeAnswer);
+        }
+    }
+
+    return Array.from(optionsSet);
+};
 </file>
 
 <file path=".gitignore">
@@ -197,221 +720,18 @@ export default defineConfig({
 })
 </file>
 
-<file path="src/components/MathTrainer/MathTrainer.css">
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-    text-align: center;
-}
+<file path="src/main.jsx">
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { RouterProvider } from 'react-router-dom';
+import { router } from './router/router';
+import './styles/global.css';
 
-.options-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    margin: 20px 0;
-}
-
-.btn-option {
-    background: #323437;
-    color: #d1d0c5;
-    border: 2px solid #e2b714;
-    padding: 12px;
-    border-radius: 8px;
-    font-size: 18px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-@media (hover: hover) {
-    .btn-option:hover {
-        background: #e2b714;
-        color: #2c2e31;
-    }
-}
-
-.expression {
-    font-size: 48px;
-    font-weight: bold;
-    margin: 20px 0;
-}
-
-.btn-option.correct {
-    background-color: #2e7d32;
-    border-color: #4caf50;
-    color: #ffffff;
-}
-
-.btn-option.wrong {
-    background-color: #c62828;
-    border-color: #f44336;
-    color: #ffffff;
-}
-
-.btn-option:disabled {
-    cursor: not-allowed;
-    opacity: 0.8;
-}
-
-.btn-option:disabled:hover:not(.correct):not(.wrong) {
-    background: #323437;
-    color: #d1d0c5;
-}
-</file>
-
-<file path="src/components/MathTrainer/MathTrainer.jsx">
-import { useState } from 'react';
-import './MathTrainer.css';
-
-const createRoundData = () => {
-    const n1 = Math.floor(Math.random() * 8) + 2;
-    const n2 = Math.floor(Math.random() * 8) + 2;
-    const correctAnswer = n1 * n2;
-
-    const optionsSet = new Set();
-    optionsSet.add(correctAnswer);
-
-    while (optionsSet.size < 4) {
-        const wrong = (Math.floor(Math.random() * 8) + 2) * (Math.floor(Math.random() * 8) + 2);
-        if (wrong !== correctAnswer) {
-            optionsSet.add(wrong);
-        }
-    }
-
-    const shuffledOptions = Array.from(optionsSet).sort(() => Math.random() - 0.5);
-
-    return { n1, n2, shuffledOptions };
-};
-
-const MathTrainer = () => {
-    const [answerStatus, setAnswerStatus] = useState(null);
-    const [selectedOption, setSelectedOption] = useState(null);
-    const [initialRound] = useState(() => createRoundData());
-    const [num1, setNum1] = useState(initialRound.n1);
-    const [num2, setNum2] = useState(initialRound.n2);
-    const [options, setOptions] = useState(initialRound.shuffledOptions);
-
-    const generateRound = () => {
-        const { n1, n2, shuffledOptions } = createRoundData();
-        setNum1(n1);
-        setNum2(n2);
-        setOptions(shuffledOptions);
-    };
-
-    const handleAnswer = (option, event) => {
-        event.currentTarget.blur();
-
-        const correctAnswer = num1 * num2;
-        setSelectedOption(option);
-        if (option === correctAnswer) {
-            setAnswerStatus('correct');
-        } else {
-            setAnswerStatus('wrong');
-        }
-        setTimeout(() => {
-            generateRound();
-            setAnswerStatus(null);
-            setSelectedOption(null);
-        }, 1000);
-    };
-
-    return (
-        <div className="container" id="main-card">
-            <div className="expression" id="math-display">{num1} × {num2}</div>
-            <div className="options-grid" id="choices-block">
-                {options.map((val, index) => (
-                    <button key={index}
-                        className={`btn-option ${val === selectedOption ? answerStatus : ''}`.trim()}
-                        onClick={(e) => handleAnswer(val, e)}
-                        disabled={answerStatus !== null}>
-                        {val}
-                    </button>
-                ))}
-            </div>
-        </div>
-    );
-}
-
-export default MathTrainer;
-</file>
-
-<file path="src/App.css">
-
-</file>
-
-<file path="src/App.jsx">
-import MathTrainer from './components/MathTrainer/MathTrainer';
-import './App.css';
-
-function App() {
-  return (
-    <div className="App">
-      <MathTrainer />
-    </div>
-  );
-}
-
-export default App;
-</file>
-
-<file path="src/index.css">
-:root {
-  --bg-color: #323437;
-  --card-bg: #2c2e31;
-  --text-main: #d1d0c5;
-  --accent: #e2b714;
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  background-color: var(--bg-color);
-  color: var(--text-main);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-}
-</file>
-
-<file path="package.json">
-{
-  "name": "umnozhay-ka",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "homepage": "https://github.io",
-  "scripts": {
-    "dev": "vite --open",
-    "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
-  },
-  "dependencies": {
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8"
-  },
-  "devDependencies": {
-    "@eslint/js": "^10.0.1",
-    "@types/react": "^19.2.17",
-    "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^4.3.4",
-    "eslint": "^10.0.0",
-    "eslint-plugin-react-hooks": "^7.1.1",
-    "eslint-plugin-react-refresh": "^0.5.3",
-    "gh-pages": "^6.3.0",
-    "globals": "^17.7.0",
-    "vite": "^6.2.0"
-  }
-}
+createRoot(document.getElementById('root')).render(
+  <StrictMode>
+    <RouterProvider router={router} />
+  </StrictMode>
+);
 </file>
 
 <file path="README.md">
@@ -431,6 +751,96 @@ The React Compiler is not enabled on this template because of its impact on dev 
 ## Expanding the ESLint configuration
 
 If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+</file>
+
+<file path="src/App.jsx">
+
+</file>
+
+<file path="package.json">
+{
+  "name": "umnozhay-ka",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "homepage": "https://github.io",
+  "scripts": {
+    "dev": "vite --open",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
+  },
+  "dependencies": {
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-router-dom": "^7.18.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^4.3.4",
+    "eslint": "^10.0.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.3",
+    "gh-pages": "^6.3.0",
+    "globals": "^17.7.0",
+    "vite": "^6.2.0"
+  }
+}
+</file>
+
+<file path=".github/workflows/deploy.yml">
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint code
+        run: npm run lint
+
+      - name: Build project
+        run: npm run build
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
 </file>
 
 </files>
