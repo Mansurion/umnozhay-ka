@@ -21,11 +21,28 @@ export const MathTrainer = () => {
         return shuffleArray(generated);
     }, [currentTask]);
 
+    const handleReset = function () {
+        setTasks(shuffleArray(generateFullTableTasks()));
+        setCurrentIndex(0);
+        setCorrectCount(0);
+        setSelectedOption(null);
+        setAnswerStatus(null);
+        setIsLocked(false);
+    };
+
     if (currentIndex >= tasks.length) {
         return (
             <div className={styles.trainerCard}>
                 <h2 className={styles.expression}>Ура! 🎉</h2>
                 <p className={styles.progressText}>Ты прошёл все 100 задач таблицы умножения!</p>
+                <button
+                    className={styles.optionButton}
+                    onClick={function () {
+                        handleReset();
+                    }}
+                >
+                    Начать заново
+                </button>
             </div>
         );
     }
